@@ -19,9 +19,7 @@ defmodule Passwordless.Application do
       )
     ]
 
-    Supervisor.start_link([
-
-    ], strategy: :one_for_one, name: Passwordless.Supervisor)
+    Supervisor.start_link(children, strategy: :one_for_one, name: Passwordless.Supervisor)
   end
 
   defp emails, do: Application.get_env(:passwordless, :repo)[:emails]
