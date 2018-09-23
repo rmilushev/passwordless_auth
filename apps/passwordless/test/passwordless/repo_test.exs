@@ -88,4 +88,29 @@ defmodule Passwordless.RepoTest do
 
     end
   end
+
+  describe ".find_by_token/2" do
+    test "returns the {email, token} if token is present" do
+      name = :repo_test_8
+      email = "8@cre.actor"
+      token = "token-value"
+
+      {:ok, _pid} = Repo.start_link(name: name, emails: [email])
+      :ok = Repo.save(name, email, token)
+
+      assert {^email, ^token} = Repo.find_by_token(name, token)
+    end
+
+    test "returns nil if token not found" do
+      name = :repo_test_9
+      email = "9@cre.actor"
+      token = "token_value"
+
+      {:ok, _pid} = Repo.start_link(name: name, emails: [email])
+
+      :ok = Repo.save(name, email, token)
+
+      assert nil == Repo.find_by_token(name, "other_token")
+    end
+  end
 end
